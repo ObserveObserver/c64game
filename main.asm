@@ -18,6 +18,13 @@ BasicUpstart2(raster)
 
 *=$1001
 
+// Map type will be of:
+// map {
+//   width: Int,
+//   squares: Array[Vec width]
+// }
+// ... for dynamic drawing and parsing of inputs ...
+
 map: .byte $FA, $FA, $FA, $FA, $FA
      .byte $FB, $FF, $FF, $FF, $FB
      .byte $FB, $FF, $FF, $FF, $FB
@@ -44,20 +51,22 @@ introBool: .byte 0
 .function toMs(X){
     .return round((50/1000)*X)  
 }
-msg2:
+// temporary just to test
+msg2: 
     .byte $fa
     .byte toMs(50)
     .text "testing!"
     .byte 0
 
+// loop, keeping everything alive for now
 exit:
     jmp exit
 
 main: 
-    jsr intro
+    jsr intro 
     drawText(msg2,$0600)
     ldx #$0A
-sleepLoop:
+sleepLoop: // temporary until I make sleep + toMs use a word
     cpx #$00
     beq breakLoop
     sleep(255)
@@ -288,8 +297,9 @@ initMsg:
     ldx #$00
     jsr main
 /////////////////
-// Sleep
 
+
+// Typewriter Printing
 ret:
     lda #$0
     sta screenPos
